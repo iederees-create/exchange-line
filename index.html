@@ -131,6 +131,9 @@
     letter-spacing:0.04em;
   }
   .board-label .count{color:var(--amber);font-variant-numeric:tabular-nums;}
+  .board-caption{
+    font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 14px;
+  }
   .board{
     display:grid;
     grid-template-columns:repeat(20,1fr);
@@ -140,8 +143,10 @@
     aspect-ratio:1;
     border-radius:3px;
     background:#232a34;
-    transition:background .25s ease, box-shadow .25s ease;
+    border:none;padding:0;cursor:pointer;
+    transition:background .15s ease, box-shadow .15s ease, transform .1s ease;
   }
+  .jack:hover{background:#2c3542;transform:scale(1.08);}
   .jack.lit{
     background:var(--amber);
     box-shadow:0 0 10px rgba(242,169,60,0.55);
@@ -150,8 +155,9 @@
     background:var(--teal);
     box-shadow:0 0 10px rgba(63,167,143,0.5);
   }
+  .jack.connected:hover{transform:scale(1.08);}
   @media (max-width:640px){
-    .board{grid-template-columns:repeat(10,1fr);}
+    .board{grid-template-columns:repeat(8,1fr);}
   }
   .board-facts{
     display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;
@@ -310,9 +316,10 @@
     <div class="board-frame">
       <div class="board-label">
         <span>LIVE EXCHANGE — YOUR LINES</span>
-        <span class="count" id="board-count">0 / 100 provisioned</span>
+        <span class="count" id="board-count" aria-live="polite">12 / 100 provisioned</span>
       </div>
-      <div class="board" id="board" role="img" aria-label="Visualization of extensions lighting up as you build your quote below"></div>
+      <p class="board-caption">Click a line to see your price →</p>
+      <div class="board" id="board" role="group" aria-label="Click a line to set your team size and jump to your price"></div>
       <div class="board-facts">
         <span><span class="dotb"></span> Inbound calls: no charge</span>
         <span><span class="dotb"></span> 3 concurrent lines on reception, 2 on every extension</span>
@@ -466,24 +473,36 @@
   // ---- Supabase config ----
   const SUPABASE_URL = 'https://sijvvbozaufzpjirijhb.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpanZ2Ym96YXVmenBqaXJpamhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMzY3NTMsImV4cCI6MjEwMDkxMjc1M30.MPHqlZuOySK56JZh_OBpFe79I-V0Zy6puI_Kw7bcx8Q';
-  let supabase = null;
-  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  }
 
-  // ---- Exchange board animation ----
+  // Loaded in the background so a slow/failed CDN fetch never blocks the
+  // board or calculator from being interactive — the lead form is the only
+  // thing that awaits this, and only at submit time.
+  const supabaseReady = (async () => {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+    return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  })();
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Exchange board: build + click-to-set-team-size ----
   const board = document.getElementById('board');
   const TOTAL_JACKS = 100;
   const frag = document.createDocumentFragment();
   for (let i = 0; i < TOTAL_JACKS; i++) {
-    const j = document.createElement('div');
+    const j = document.createElement('button');
+    j.type = 'button';
     j.className = 'jack';
+    j.dataset.index = i;
+    j.setAttribute('aria-label', 'Set team size to ' + (i + 1));
+    // Mouse/touch shortcut only: the calculator's range input below is the
+    // fully keyboard-operable equivalent, so 100 sequential tab stops here
+    // would be a keyboard trap, not a feature.
+    j.tabIndex = -1;
     frag.appendChild(j);
   }
   board.appendChild(frag);
   const jacks = Array.from(board.children);
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function lightBoard(n) {
     jacks.forEach((j, i) => {
@@ -550,6 +569,24 @@
   }
 
   staffSlider.addEventListener('input', recalc);
+
+  // Clicking (or tapping) a jack sets that team size and jumps to the
+  // calculator, so the hero board is a real entry point into getting a
+  // quote, not just decoration. The slider stays in sync either way, since
+  // both paths funnel through the same recalc().
+  board.addEventListener('click', (e) => {
+    const jack = e.target.closest('.jack');
+    if (!jack) return;
+    const staff = Number(jack.dataset.index) + 1;
+    staffSlider.value = Math.min(staff, Number(staffSlider.max));
+    recalc();
+    document.getElementById('calculator').scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'start',
+    });
+    staffSlider.focus({ preventScroll: true });
+  });
+
   recalc();
 
   // ---- Lead form ----
@@ -574,6 +611,8 @@
     btn.disabled = true;
     statusEl.textContent = '';
     statusEl.className = 'form-status';
+
+    const supabase = await supabaseReady;
 
     if (!supabase) {
       console.log('Lead captured (Supabase not configured):', payload);
