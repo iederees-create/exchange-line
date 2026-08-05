@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cut the landline. Cloud PBX for South African businesses.</title>
-<meta name="description" content="See what a cloud business exchange costs for your team in 10 seconds. Unlimited extensions, no hardware, R0.33/min to Telkom landlines. No call required.">
-<meta property="og:title" content="Exchange Line — Cloud business exchange for South African teams">
-<meta property="og:description" content="Build your quote in 10 seconds. Unlimited extensions, real published CBX rates, no call required.">
+<title>Exchange Line | A clearer business phone setup</title>
+<meta name="description" content="Tell us where business calls are being missed or difficult to manage. Iederees Francis confirms your requirements and Premitel prepares a tailored formal quote.">
+<meta property="og:title" content="Exchange Line - a business phone setup that simply works">
+<meta property="og:description" content="A quick, jargon-free phone-system check. Formal Premitel quotes are prepared privately after requirements are confirmed.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#12151a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312151a'/%3E%3Crect x='9' y='9' width='14' height='14' rx='2' fill='%23f2a93c'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root{
     --ink:#12151a;
@@ -292,349 +293,47 @@
   footer{border-top:1px solid var(--line);padding:32px 0;}
   .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
     font-size:12.5px;color:var(--muted);}
+
+/* Guided phone check and accessible WhatsApp funnel */
+.board-selection{font-weight:600;margin:16px 0 0;min-height:24px}.plain-label{display:block;font:14px var(--mono);color:var(--muted);margin-bottom:10px}.text-control{width:100%;background:var(--ink-soft);border:1px solid var(--line);border-radius:9px;padding:12px 14px;color:var(--paper);min-height:48px}.calc-readout h3{font:600 25px var(--display);margin:0 0 14px}.requirements-list{list-style:none;padding:0;margin:0 0 24px}.requirements-list li{padding:10px 0;border-bottom:1px solid var(--line)}.requirements-list span{display:block;font:11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.formal-note{border-left:3px solid var(--teal);padding:8px 0 8px 14px;color:var(--muted)}.dialog-actions{display:flex;gap:12px;flex-wrap:wrap}.dialog-actions.centered,.cta-eyebrow{justify-content:center}.wa-float{position:fixed;right:20px;bottom:20px;z-index:60;border:0;border-radius:999px;background:#25d366;color:#071b0e;padding:14px 19px;min-height:52px;font-weight:800;box-shadow:0 12px 36px rgba(0,0,0,.38)}.dialog-backdrop[hidden]{display:none}.dialog-backdrop{position:fixed;inset:0;z-index:100;background:rgba(5,7,10,.78);display:grid;place-items:center;padding:16px}.wa-dialog{width:min(680px,100%);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:var(--ink-soft);border:1px solid var(--line);border-radius:16px}.dialog-head{position:sticky;top:0;z-index:1;display:flex;align-items:start;justify-content:space-between;gap:18px;padding:20px 24px;background:var(--ink-soft);border-bottom:1px solid var(--line)}.dialog-head h2{margin:0}.dialog-close{width:44px;height:44px;flex:none;border:1px solid var(--line);border-radius:8px;background:var(--ink);color:var(--paper);font-size:22px}.dialog-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px 24px 28px}.dialog-form label{font:13px var(--mono);color:var(--muted)}.dialog-form .text-control{display:block;margin-top:8px;font-family:var(--body)}.dialog-form textarea{min-height:92px;resize:vertical}.dialog-form .wide{grid-column:1/-1}.dialog-help{font:13px var(--body);color:var(--muted);margin:0}body.dialog-open{overflow:hidden}
+@media(max-width:560px){.dialog-backdrop{padding:8px}.wa-dialog{max-height:calc(100dvh - 16px);border-radius:12px}.dialog-form{grid-template-columns:1fr;padding:18px}.dialog-form .wide{grid-column:auto}.dialog-head{padding:16px 18px}.wa-float{right:12px;bottom:12px}.board{grid-template-columns:repeat(8,1fr)}}
 </style>
 </head>
 <body>
-
-<header class="nav">
-  <div class="nav-inner">
-    <div class="brand"><span class="dot"></span> Exchange&nbsp;Line</div>
-    <a class="nav-cta" href="#calculator">Get your price</a>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="wrap">
-    <div class="eyebrow">Cloud business exchange · South Africa</div>
-    <h1>Your office phone system<br>hasn't caught up to <em>2026</em>.</h1>
-    <p class="lede">Unlimited extensions, call handling that doesn't need an IT visit, and R0.33/min to Telkom landlines. See exactly what it costs for your team, right now — no call required.</p>
-    <div class="hero-actions">
-      <a href="#calculator" class="btn-primary">Build my quote →</a>
-      <a href="#compare" class="btn-ghost">See what changes</a>
-    </div>
-
-    <div class="board-frame">
-      <div class="board-label">
-        <span>LIVE EXCHANGE — YOUR LINES</span>
-        <span class="count" id="board-count" aria-live="polite">12 / 100 provisioned</span>
-      </div>
-      <p class="board-caption">Click a line to see your price →</p>
-      <div class="board" id="board" role="group" aria-label="Click a line to set your team size and jump to your price"></div>
-      <div class="board-facts">
-        <span><span class="dotb"></span> Inbound calls: no charge</span>
-        <span><span class="dotb"></span> 3 concurrent lines on reception, 2 on every extension</span>
-        <span><span class="dotb"></span> Self-serve setup, same day</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="calculator">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Instant estimate</div>
-      <h2>Tell us your headcount.<br>We'll tell you the number.</h2>
-      <p>Drag to your team size and toggle the features you need. Built from the published CBX bundle rate sheet — your confirmed quote comes by email, direct from us.</p>
-    </div>
-
-    <div class="calc">
-      <div class="calc-controls">
-        <div class="field">
-          <label class="field-label" for="staff">Number of staff needing a line <span class="val" id="staff-val">12</span></label>
-          <input type="range" id="staff" min="1" max="150" value="12" aria-describedby="staff-val">
-        </div>
-
-        <fieldset class="toggles">
-          <legend>Add-on features</legend>
-          <div class="toggle-option">
-            <input type="checkbox" id="feat-avr" checked>
-            <label for="feat-avr"><span class="box"></span> Auto attendant (IVR)</label>
-          </div>
-          <div class="toggle-option">
-            <input type="checkbox" id="feat-did" checked>
-            <label for="feat-did"><span class="box"></span> Direct numbers (DID)</label>
-          </div>
-          <div class="toggle-option">
-            <input type="checkbox" id="feat-hgr">
-            <label for="feat-hgr"><span class="box"></span> Call queues / hunt groups</label>
-          </div>
-          <div class="toggle-option">
-            <input type="checkbox" id="feat-apn">
-            <label for="feat-apn"><span class="box"></span> 1GB mobile data bundle</label>
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="calc-readout">
-        <div>
-          <div class="readout-tier" id="tier-label">TIER · CBX-11</div>
-          <div class="readout-price">
-            <span class="cur">R</span><span id="price">380</span><span class="per">/ month</span>
-          </div>
-          <div class="readout-note" id="mru-note">Typical monthly usage for this size team: ~R1,000</div>
-
-          <div class="readout-includes">
-            Included as standard
-            <ul>
-              <li>Unlimited extensions on the exchange</li>
-              <li>Call forwarding, voicemail-to-email, do-not-disturb</li>
-              <li>Real-time call records &amp; usage dashboard</li>
-              <li>Music on hold, call transfer, call waiting</li>
-            </ul>
-          </div>
-        </div>
-
-        <form class="lead-form" id="lead-form" novalidate>
-          <label class="sr-only-label" for="f-company">Company name</label>
-          <input type="text" id="f-company" placeholder="Company name" required name="company" autocomplete="organization">
-
-          <label class="sr-only-label" for="f-name">Your name</label>
-          <input type="text" id="f-name" placeholder="Your name" required name="name" autocomplete="name">
-
-          <label class="sr-only-label" for="f-email">Work email</label>
-          <input type="email" id="f-email" placeholder="Work email" required name="email" autocomplete="email">
-
-          <label class="sr-only-label" for="f-phone">WhatsApp number (optional)</label>
-          <input type="tel" id="f-phone" placeholder="WhatsApp number (optional)" name="phone" autocomplete="tel">
-
-          <button type="submit" class="btn-primary" style="justify-content:center;border:none;">Email me this quote →</button>
-          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
-          <div class="disclaimer">Estimate only, built from the published CBX bundle rate sheet. Final pricing is confirmed directly before any contract. No spam — one quote email, then you choose what happens next.</div>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="compare">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">What actually changes</div>
-      <h2>Same number. Fewer headaches.</h2>
-      <p>Keep your existing number where possible — the exchange behind it is what changes.</p>
-    </div>
-    <div class="table-scroll">
-      <table class="compare">
-        <tr><th scope="col">&nbsp;</th><th scope="col">Legacy landline / on-prem PBX</th><th scope="col">Cloud exchange</th></tr>
-        <tr><th scope="row">Extensions</th><td class="no">Limited by hardware</td><td class="yes">Unlimited, added in minutes</td></tr>
-        <tr><th scope="row">New starter setup</th><td class="no">Site visit, physical line</td><td class="yes">Self-serve, same day</td></tr>
-        <tr><th scope="row">Missed calls</th><td class="no">Ring and drop</td><td class="yes">Auto attendant routes them</td></tr>
-        <tr><th scope="row">Call records</th><td class="no">Ask the provider</td><td class="yes">Live dashboard, anytime</td></tr>
-        <tr><th scope="row">Working remotely</th><td class="no">Not possible</td><td class="yes">Any extension, anywhere</td></tr>
-        <tr><th scope="row">Landline call rate</th><td class="no">Standard Telkom rate</td><td class="yes">R0.33/min excl. VAT</td></tr>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Built for teams that answer the phone</div>
-      <h2>Three things that actually save time.</h2>
-    </div>
-    <div class="grid3">
-      <div class="cell">
-        <div class="label">Auto attendant</div>
-        <h3>Calls route themselves</h3>
-        <p>A voice menu sends callers to the right extension or hunt group by keypad choice — so your receptionist isn't the only door into the business.</p>
-      </div>
-      <div class="cell">
-        <div class="label">Direct numbers</div>
-        <h3>Reach the right person first</h3>
-        <p>Give key staff their own DID number. Clients get through directly, no transfer needed, and reception has more time for everything else.</p>
-      </div>
-      <div class="cell">
-        <div class="label">Web self-care</div>
-        <h3>Change settings yourself</h3>
-        <p>Update call routing and watch spend in real time from the dashboard — no ticket, no waiting on a technician.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="cta-final">
-  <div class="wrap">
-    <div class="eyebrow" style="justify-content:center;">Ready when you are</div>
-    <h2>Get your number in front of the right people.</h2>
-    <p>Build your quote above, or send your current setup and we'll come back with a straight comparison — no pressure, no call.</p>
-    <a href="#calculator" class="btn-primary">Build my quote →</a>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap footer-inner">
-    <div>Exchange Line — Cloud PBX for South African SMEs</div>
-    <div>POPIA-compliant · unsubscribe anytime · no cold calls</div>
-  </div>
-</footer>
-
+<header class="nav"><div class="nav-inner"><div class="brand"><span class="dot"></span> Exchange&nbsp;Line</div><a class="nav-cta" href="#calculator">Check your setup</a></div></header>
+<main><section class="hero"><div class="wrap"><div class="eyebrow">Premitel business communications - South Africa</div><h1>Make business calls <em>easier to manage.</em></h1><p class="lede">If calls are being missed, routing feels messy or support takes too long, tell us what is getting in the way. We'll help you map a phone setup that simply works.</p><div class="hero-actions"><a href="#team-lines" class="btn-primary">Check your setup &rarr;</a><a href="#how-it-works" class="btn-ghost">How it works</a></div>
+<div class="board-frame" id="team-lines"><div class="board-label"><strong>STEP 1 - YOUR TEAM LINES</strong><span class="count" id="board-count" aria-live="polite">No lines selected yet</span></div><p class="board-caption">How many people need to make or receive business calls? Select the last line you need - choosing line 12 selects 12 people.</p><div class="board" id="board" role="radiogroup" aria-label="Number of team members needing a business line"></div><p class="board-selection" id="selection-summary" aria-live="polite">Choose a line to begin.</p><div class="board-facts"><span><span class="dotb"></span>One line per team member.</span><span><span class="dotb"></span>Keep your existing number where possible.</span><span><span class="dotb"></span>We confirm the right setup with you.</span></div><button class="btn-primary" id="continue-check" type="button" hidden>Continue to phone check &rarr;</button></div></div></section>
+<section id="calculator"><div class="wrap"><div class="section-head"><div class="eyebrow">60-second phone check</div><h2>Tell us what gets in the way.<br>We'll map a better setup.</h2><p>You do not need to understand PBX terminology or design the system yourself. Choose the outcomes your business needs and we'll translate them into the right configuration.</p></div><div class="calc"><div class="calc-controls">
+<div class="field"><label class="field-label" for="staff">Staff members needing a line <span class="val" id="staff-val">1</span></label><input type="range" id="staff" min="1" max="100" value="1" aria-describedby="staff-val"></div><div class="field"><label class="plain-label" for="locations">Number of office locations</label><input class="text-control" id="locations" type="number" min="1" max="100" value="1"></div><div class="field"><label class="plain-label" for="current-setup">Current phone setup</label><select class="text-control" id="current-setup"><option>Not sure</option><option>Telkom landline</option><option>On-premise PBX</option><option>Cloud PBX / VoIP</option><option>Mobile phones only</option><option>Other</option></select></div>
+<fieldset class="toggles" id="priorities"><legend>What would you like to improve?</legend><div class="toggle-option"><input type="checkbox" id="p-missed" value="Reduce missed calls"><label for="p-missed"><span class="box"></span>Reduce missed calls.</label></div><div class="toggle-option"><input type="checkbox" id="p-route" value="Route calls more easily"><label for="p-route"><span class="box"></span>Route calls more easily.</label></div><div class="toggle-option"><input type="checkbox" id="p-remote" value="Support remote staff"><label for="p-remote"><span class="box"></span>Support remote staff.</label></div><div class="toggle-option"><input type="checkbox" id="p-visibility" value="Improve usage visibility"><label for="p-visibility"><span class="box"></span>Improve usage visibility.</label></div><div class="toggle-option"><input type="checkbox" id="p-record" value="Record important calls"><label for="p-record"><span class="box"></span>Record important calls.</label></div><div class="toggle-option"><input type="checkbox" id="p-number" value="Keep our current number"><label for="p-number"><span class="box"></span>Keep our current number.</label></div></fieldset></div>
+<aside class="calc-readout"><div><h3 id="requirements-title">Your requirements</h3><ul class="requirements-list" aria-live="polite"><li><span>Team</span><strong id="sum-staff">1 staff member needs a line</strong></li><li><span>Locations</span><strong id="sum-locations">1 office location</strong></li><li><span>Current setup</span><strong id="sum-setup">Not sure</strong></li><li><span>Priorities</span><strong id="sum-priorities">None selected yet</strong></li></ul><p class="formal-note">Iederees will confirm the requirements and Louise at Premitel will prepare the formal quote privately.</p></div><form class="lead-form" id="lead-form" novalidate><label class="sr-only-label" for="f-company">Company name</label><input type="text" id="f-company" name="company" placeholder="Company name" required><label class="sr-only-label" for="f-name">Your name</label><input type="text" id="f-name" name="name" placeholder="Your name" required><label class="sr-only-label" for="f-email">Work email</label><input id="f-email" name="email" type="email" placeholder="Work email" required><label class="sr-only-label" for="f-whatsapp">WhatsApp number</label><input id="f-whatsapp" name="whatsapp" type="tel" placeholder="WhatsApp number (optional)"><button class="btn-primary" type="submit">Request my tailored quote &rarr;</button><div class="form-status" id="form-status" role="status" aria-live="polite"></div><p class="disclaimer">Used only to respond to this inbound request, not as consent to unrelated marketing.</p></form></aside></div></div></section>
+<section id="how-it-works"><div class="wrap"><div class="section-head"><div class="eyebrow">A simpler process</div><h2>Describe the problem. We handle the configuration.</h2></div><div class="grid3"><article class="cell"><div class="label">01</div><h3>Tell us what is happening</h3><p>Share your team size, locations and call problems.</p></article><article class="cell"><div class="label">02</div><h3>We confirm requirements</h3><p>Iederees checks the practical requirements with you.</p></article><article class="cell"><div class="label">03</div><h3>Receive a formal quote</h3><p>Louise at Premitel prepares the suitable setup and formal quote privately.</p></article></div></div></section>
+<section class="cta-final"><div class="wrap"><div class="eyebrow cta-eyebrow">Ready when you are</div><h2>Start with the calls that are getting in the way.</h2><p>No technical design exercise and no public price guess.</p><div class="dialog-actions centered"><a href="#team-lines" class="btn-primary">Check your setup &rarr;</a><button class="btn-ghost js-open-wa" type="button">Qualify on WhatsApp</button></div></div></section></main>
+<footer><div class="wrap footer-inner"><div>Exchange Line - Iederees Francis's Premitel freelance sales service</div><div>Inbound enquiries only - POPIA-aware</div></div></footer><button class="wa-float js-open-wa" type="button" aria-haspopup="dialog">WhatsApp enquiry</button>
+<div class="dialog-backdrop" id="wa-backdrop" hidden><section class="wa-dialog" id="wa-dialog" role="dialog" aria-modal="true" aria-labelledby="wa-title" tabindex="-1"><div class="dialog-head"><h2 id="wa-title">Tell us what your team needs</h2><button class="dialog-close" id="wa-close" type="button" aria-label="Close WhatsApp questionnaire">&times;</button></div><form class="dialog-form" id="wa-form"><label>Name<input type="text" class="text-control" id="wa-name" name="name" required></label><label>Company<input type="text" class="text-control" id="wa-company" name="company" required></label><label>Role<input type="text" class="text-control" name="role" required></label><label>Work email<input class="text-control" id="wa-email" name="email" type="email" required></label><label>Staff needing lines<input class="text-control" id="wa-staff" name="staff" type="number" min="1" required></label><label>Office locations<input class="text-control" id="wa-locations" name="locations" type="number" min="1" required></label><label>Current setup<select class="text-control" id="wa-setup" name="setup"><option>Not sure</option><option>Telkom landline</option><option>On-premise PBX</option><option>Cloud PBX / VoIP</option><option>Mobile phones only</option><option>Other</option></select></label><label>Approximate monthly phone spend<input type="text" class="text-control" name="spend" placeholder="Not sure"></label><label class="wide">Main challenges<textarea class="text-control" id="wa-challenges" name="challenges" required></textarea></label><label>Change timeline<select class="text-control" name="timeline"><option>Just researching</option><option>Within 3 months</option><option>Within 1 month</option><option>As soon as possible</option></select></label><label>Best time for a WhatsApp reply<input type="text" class="text-control" name="reply" required></label><label class="wide">Additional notes<textarea class="text-control" name="notes"></textarea></label><p class="wide dialog-help">Review the message in WhatsApp and press Send yourself. Nothing is sent automatically.</p><div class="wide dialog-actions"><button class="btn-primary" type="submit">Review in WhatsApp &rarr;</button><button class="btn-ghost" id="wa-cancel" type="button">Cancel</button></div></form></section></div>
 <script type="module">
-  // ---- Supabase config ----
-  const SUPABASE_URL = 'https://sijvvbozaufzpjirijhb.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpanZ2Ym96YXVmenBqaXJpamhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMzY3NTMsImV4cCI6MjEwMDkxMjc1M30.MPHqlZuOySK56JZh_OBpFe79I-V0Zy6puI_Kw7bcx8Q';
-
-  // Loaded in the background so a slow/failed CDN fetch never blocks the
-  // board or calculator from being interactive — the lead form is the only
-  // thing that awaits this, and only at submit time.
-  const supabaseReady = (async () => {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
-    const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-    return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  })();
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ---- Exchange board: build + click-to-set-team-size ----
-  const board = document.getElementById('board');
-  const TOTAL_JACKS = 100;
-  const frag = document.createDocumentFragment();
-  for (let i = 0; i < TOTAL_JACKS; i++) {
-    const j = document.createElement('button');
-    j.type = 'button';
-    j.className = 'jack';
-    j.dataset.index = i;
-    j.setAttribute('aria-label', 'Set team size to ' + (i + 1));
-    // Mouse/touch shortcut only: the calculator's range input below is the
-    // fully keyboard-operable equivalent, so 100 sequential tab stops here
-    // would be a keyboard trap, not a feature.
-    j.tabIndex = -1;
-    frag.appendChild(j);
-  }
-  board.appendChild(frag);
-  const jacks = Array.from(board.children);
-
-  function lightBoard(n) {
-    jacks.forEach((j, i) => {
-      j.classList.remove('lit', 'connected');
-      if (i < n) {
-        j.classList.add('lit');
-        if (prefersReducedMotion) {
-          j.classList.add('connected');
-        } else {
-          setTimeout(() => j.classList.add('connected'), 40 + i * 4);
-        }
-      }
-    });
-    document.getElementById('board-count').textContent = Math.min(n, 100) + ' / 100 provisioned';
-  }
-
-  // ---- Pricing model ----
-  // Tiers + rates sourced directly from the December 2024 CBX bundle rate
-  // sheet. "capacity" is what the bundle actually includes (operator +
-  // extensions); staff beyond that are billed at the tier's per-extension
-  // add-on rate, same as Premitel would quote it.
-  const TIERS = [
-    { code: 'CBX-3',   capacity: 3,   base: 100,  extRate: 25, mru: 300 },
-    { code: 'CBX-11',  capacity: 11,  base: 380,  extRate: 21, mru: 1000 },
-    { code: 'CBX-21',  capacity: 21,  base: 640,  extRate: 21, mru: 2000 },
-    { code: 'CBX-51',  capacity: 51,  base: 1370, extRate: 19, mru: 5000 },
-    { code: 'CBX-101', capacity: 101, base: 2700, extRate: 19, mru: 10000 },
-  ];
-  const ADDON_COST = { avr: 56, did: 32, hgr: 32, apn: 176 };
-  const ADDON_IDS = { avr: 'feat-avr', did: 'feat-did', hgr: 'feat-hgr', apn: 'feat-apn' };
-
-  const staffSlider = document.getElementById('staff');
-  const staffVal = document.getElementById('staff-val');
-  const tierLabel = document.getElementById('tier-label');
-  const priceEl = document.getElementById('price');
-  const mruNote = document.getElementById('mru-note');
-
-  Object.values(ADDON_IDS).forEach(id => {
-    document.getElementById(id).addEventListener('change', recalc);
-  });
-
-  function pickTier(staff) {
-    return TIERS.find(t => staff <= t.capacity) || TIERS[TIERS.length - 1];
-  }
-
-  function recalc() {
-    const staff = parseInt(staffSlider.value, 10);
-    staffVal.textContent = staff;
-    lightBoard(staff);
-
-    const tier = pickTier(staff);
-    tierLabel.textContent = 'TIER · ' + tier.code;
-
-    let total = tier.base;
-    const overage = Math.max(0, staff - tier.capacity);
-    total += overage * tier.extRate;
-
-    Object.entries(ADDON_IDS).forEach(([key, id]) => {
-      if (document.getElementById(id).checked) total += (ADDON_COST[key] || 0);
-    });
-
-    priceEl.textContent = total.toLocaleString('en-ZA');
-    mruNote.textContent = 'Typical monthly usage for this size team: ~R' + tier.mru.toLocaleString('en-ZA');
-  }
-
-  staffSlider.addEventListener('input', recalc);
-
-  // Clicking (or tapping) a jack sets that team size and jumps to the
-  // calculator, so the hero board is a real entry point into getting a
-  // quote, not just decoration. The slider stays in sync either way, since
-  // both paths funnel through the same recalc().
-  board.addEventListener('click', (e) => {
-    const jack = e.target.closest('.jack');
-    if (!jack) return;
-    const staff = Number(jack.dataset.index) + 1;
-    staffSlider.value = Math.min(staff, Number(staffSlider.max));
-    recalc();
-    document.getElementById('calculator').scrollIntoView({
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-      block: 'start',
-    });
-    staffSlider.focus({ preventScroll: true });
-  });
-
-  recalc();
-
-  // ---- Lead form ----
-  const form = document.getElementById('lead-form');
-  const statusEl = document.getElementById('form-status');
-  const activeFeatures = () => Object.keys(ADDON_IDS).filter(k => document.getElementById(ADDON_IDS[k]).checked);
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const fd = new FormData(form);
-    const payload = {
-      company_name: fd.get('company'),
-      contact_name: fd.get('name'),
-      email: fd.get('email'),
-      whatsapp: fd.get('phone') || null,
-      staff_count_est: parseInt(staffSlider.value, 10),
-      source: 'landing_calculator',
-      fit_reason: 'Submitted via landing page calculator: ' + tierLabel.textContent + ', R' + priceEl.textContent + '/mo, features: ' + (activeFeatures().join(', ') || 'none'),
-    };
-
-    const btn = form.querySelector('button[type="submit"]');
-    btn.disabled = true;
-    statusEl.textContent = '';
-    statusEl.className = 'form-status';
-
-    const supabase = await supabaseReady;
-
-    if (!supabase) {
-      console.log('Lead captured (Supabase not configured):', payload);
-      statusEl.textContent = 'Sent — check your inbox.';
-      statusEl.className = 'form-status ok';
-      btn.textContent = 'Sent — check your inbox ✓';
-      return;
-    }
-
-    try {
-      const { error } = await supabase.from('leads').insert(payload);
-      if (error) throw error;
-      statusEl.textContent = 'Sent — check your inbox.';
-      statusEl.className = 'form-status ok';
-      btn.textContent = 'Sent — check your inbox ✓';
-    } catch (err) {
-      console.error('Lead submission failed:', err);
-      statusEl.textContent = 'Something went wrong — please try again or WhatsApp us directly.';
-      statusEl.className = 'form-status err';
-      btn.disabled = false;
-    }
-  });
+const SUPABASE_URL='https://sijvvbozaufzpjirijhb.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm96YXVmenBqaXJpamhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMzY3NTMsImV4cCI6MjEwMDkxMjc1M30.MPHqlZuOySK56JZh_OBpFe79I-V0Zy6puI_Kw7bcx8Q';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const board=document.getElementById('board'),count=document.getElementById('board-count'),selection=document.getElementById('selection-summary'),continueBtn=document.getElementById('continue-check'),staff=document.getElementById('staff'),staffVal=document.getElementById('staff-val'),locations=document.getElementById('locations'),setup=document.getElementById('current-setup'),priorities=[...document.querySelectorAll('#priorities input')];
+for(let i=1;i<=100;i++){const b=document.createElement('button');b.type='button';b.className='jack';b.dataset.lines=String(i);b.setAttribute('role','radio');b.setAttribute('aria-checked','false');b.setAttribute('aria-label',i+' '+(i===1?'person':'people')+' need a business line');b.tabIndex=i===1?0:-1;board.appendChild(b)}
+const jacks=[...board.children],plural=(n,a,b)=>n===1?a:b,chosen=()=>priorities.filter(p=>p.checked).map(p=>p.value);
+function summary(){const n=Number(staff.value),l=Math.max(1,Number(locations.value)||1),p=chosen();staffVal.textContent=String(n);document.getElementById('sum-staff').textContent=n+' '+plural(n,'staff member needs','staff members need')+' a line';document.getElementById('sum-locations').textContent=l+' office '+plural(l,'location','locations');document.getElementById('sum-setup').textContent=setup.value;document.getElementById('sum-priorities').textContent=p.length?p.join(', '):'None selected yet'}
+function selectLines(value,moveFocus=false){const n=Math.max(1,Math.min(100,value));jacks.forEach((j,i)=>{j.classList.toggle('connected',i<n);j.setAttribute('aria-checked',String(i===n-1));j.tabIndex=i===n-1?0:-1});count.textContent=n+' '+plural(n,'line','lines')+' selected';selection.textContent=n+' '+plural(n,'person needs','people need')+' a business line.';continueBtn.hidden=false;staff.value=String(n);summary();if(moveFocus)jacks[n-1].focus({preventScroll:true})}
+board.addEventListener('click',e=>{const j=e.target.closest('.jack');if(j)selectLines(Number(j.dataset.lines))});
+board.addEventListener('keydown',e=>{const j=e.target.closest('.jack');if(!j)return;let n=Number(j.dataset.lines);if(e.key==='ArrowRight'||e.key==='ArrowDown')n++;else if(e.key==='ArrowLeft'||e.key==='ArrowUp')n--;else if(e.key==='Home')n=1;else if(e.key==='End')n=100;else return;e.preventDefault();selectLines(n,true)});
+continueBtn.addEventListener('click',()=>{document.getElementById('calculator').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});setTimeout(()=>staff.focus({preventScroll:true}),reduced?0:450)});
+staff.addEventListener('input',()=>selectLines(Number(staff.value)));[locations,setup,...priorities].forEach(x=>x.addEventListener('input',summary));summary();
+const leadForm=document.getElementById('lead-form'),status=document.getElementById('form-status');
+leadForm.addEventListener('submit',async e=>{e.preventDefault();if(!leadForm.reportValidity())return;const fd=new FormData(leadForm),n=Number(staff.value),l=Math.max(1,Number(locations.value)||1),p=chosen(),btn=leadForm.querySelector('button[type=submit]');btn.disabled=true;btn.textContent='Submitting...';status.textContent='';status.className='form-status';const payload={company_name:String(fd.get('company')).trim(),contact_name:String(fd.get('name')).trim(),email:String(fd.get('email')).trim(),whatsapp:String(fd.get('whatsapp')).trim()||null,staff_count_est:n,current_provider:setup.value,source:'landing_calculator',consent_basis:'inbound_request',fit_reason:'Team size: '+n+'; office locations: '+l+'; priorities: '+(p.join(', ')||'none selected'),notes:'Formal quote must be prepared by Louise at Premitel after Iederees confirms the requirements.'};const result=await supabaseClient.from('leads').insert(payload);if(result.error){console.error('Lead insert failed:',result.error);status.textContent='Something went wrong - please try again or use the WhatsApp enquiry.';status.className='form-status err';btn.disabled=false;btn.textContent='Request my tailored quote';return}status.textContent='Thank you\u2014I\'ll contact you shortly.';status.className='form-status ok';btn.textContent='Request received'});
+const backdrop=document.getElementById('wa-backdrop'),dialog=document.getElementById('wa-dialog'),waForm=document.getElementById('wa-form');let returnFocus=null;
+function inherit(){document.getElementById('wa-staff').value=staff.value;document.getElementById('wa-locations').value=locations.value;document.getElementById('wa-setup').value=setup.value;if(chosen().length&&!document.getElementById('wa-challenges').value)document.getElementById('wa-challenges').value=chosen().join('; ');for(const pair of [['f-name','wa-name'],['f-company','wa-company'],['f-email','wa-email']])if(document.getElementById(pair[0]).value&&!document.getElementById(pair[1]).value)document.getElementById(pair[1]).value=document.getElementById(pair[0]).value}
+function openDialog(trigger){returnFocus=trigger;inherit();backdrop.hidden=false;document.body.classList.add('dialog-open');dialog.focus()}
+function closeDialog(){backdrop.hidden=true;document.body.classList.remove('dialog-open');if(returnFocus)returnFocus.focus();returnFocus=null}
+document.querySelectorAll('.js-open-wa').forEach(b=>b.addEventListener('click',()=>openDialog(b)));document.getElementById('wa-close').addEventListener('click',closeDialog);document.getElementById('wa-cancel').addEventListener('click',closeDialog);backdrop.addEventListener('mousedown',e=>{if(e.target===backdrop)closeDialog()});
+document.addEventListener('keydown',e=>{if(backdrop.hidden)return;if(e.key==='Escape'){e.preventDefault();closeDialog();return}if(e.key==='Tab'){const f=[...dialog.querySelectorAll('button,input,select,textarea')].filter(x=>!x.disabled),first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+waForm.addEventListener('submit',e=>{e.preventDefault();if(!waForm.reportValidity())return;const f=new FormData(waForm),lines=['Name: '+f.get('name'),'Company: '+f.get('company'),'Role: '+f.get('role'),'Work email: '+f.get('email'),'Staff needing lines: '+f.get('staff'),'Office locations: '+f.get('locations'),'Current setup: '+f.get('setup'),'Approximate monthly phone spend: '+(f.get('spend')||'Not sure'),'Priorities from phone check: '+(chosen().join(', ')||'None selected'),'Main challenges: '+f.get('challenges'),'Change timeline: '+f.get('timeline'),'Best time for a WhatsApp reply: '+f.get('reply'),'Additional notes: '+(f.get('notes')||'None'),'','Please help us confirm the right setup and arrange a formal quote.'];window.open('https://wa.me/27629494708?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener')});
 </script>
 
 </body>

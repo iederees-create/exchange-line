@@ -1,44 +1,38 @@
 # Exchange Line
 
-A conversion-focused landing page with a live quote calculator, a
-Supabase-backed lead pipeline, and a compliant cold outreach sequence —
-built for a South African Cloud PBX (Premitel CBX) reseller business.
+A conversion-focused landing page for Iederees Francis's Premitel freelance
+sales work. The public journey identifies business phone problems, gathers
+requirements and sends inbound enquiries to Supabase or a review-before-send
+WhatsApp funnel.
 
 ## What's here
 
-```
-index.html   Landing page with the live quote calculator — served
-              directly as the GitHub Pages homepage from repo root
-db/          Supabase/Postgres schema + RLS policies
-email/       3-touch cold outreach sequence + sequencing rules
-docs/        Lead sourcing methodology and POPIA compliance notes
-             (internal — not part of the public site)
-```
+- `index.html` - GitHub Pages landing page and 60-second phone check.
+- `db/` - Supabase/Postgres schema, RLS and consent migrations.
+- `email/` - problem-led outreach sequence and operating rules.
+- `docs/` - internal lead-sourcing and POPIA notes.
 
-## Stack
+## Public quote policy
 
-Dependency-free HTML/CSS/JS · Supabase (Postgres + RLS) · hosted on
-GitHub Pages, live at https://iederees-create.github.io/exchange-line/
+The public site deliberately does not expose Premitel rates, bundle codes,
+bundle prices, technical add-on prices or calculated estimates. Prospects are
+not expected to configure PBX terminology themselves. They describe their team,
+locations, current setup and desired outcomes; Iederees confirms the
+requirements and Louise at Premitel prepares the formal quote privately.
 
-`index.html` lives at repo root because that's what GitHub Pages'
-default build serves — there is exactly one copy of the landing page,
-so there's no risk of it drifting from a second copy elsewhere.
+Internal database quote fields remain available for authorised operational use.
+They are not populated with a browser-generated public estimate.
 
-## Pricing model
+## Stack and deployment
 
-The quote calculator's tiers and rates are pulled directly from
-Premitel's published CBX bundle rate sheet — not estimated. See the
-comments in `index.html`'s pricing script for the source figures.
+Dependency-free HTML/CSS/JavaScript, Supabase (Postgres plus RLS), and GitHub
+Pages. The live homepage is served from `main` at:
+
+https://iederees-create.github.io/exchange-line/
 
 ## Database
 
-Run `db/schema.sql` first, then `db/002_rls_policies.sql`. The second
-file is not optional — without it, the public anon key can read every
-lead's contact details.
-
-## Status
-
-Live on GitHub Pages at https://iederees-create.github.io/exchange-line/
-(served from `main`, root). This is an active reseller lead-gen build —
-see the project owner's private notes for current agreement/compliance
-status before pointing outreach traffic at this site.
+Apply `db/schema.sql`, then the numbered migrations in order. The RLS and
+consent migrations are required before public traffic: anonymous visitors may
+submit an inbound request, but may not read lead PII or convert that request
+into marketing consent.
