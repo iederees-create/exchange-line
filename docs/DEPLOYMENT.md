@@ -10,10 +10,11 @@ Back up the Supabase database before any migration and verify the target project
 
 1. Existing `db/schema.sql`, `db/002_rls_policies.sql`, and `db/003_consent_tracking.sql` must already be applied.
 2. Apply `db/004_ecosystem.sql`. It is additive and deliberately leaves the current anonymous lead insert available.
-3. Deploy and configure `submit-lead`.
-4. Live-test the function and confirm one request creates a lead, requirement, activity and follow-up task.
-5. Change `submissionMode` in `assets/js/config.js` from `legacy-direct` to `edge-function`, deploy GitHub Pages, and repeat the test.
-6. Only then apply `db/005_disable_direct_anon_lead_insert.sql` and confirm direct anonymous inserts fail.
+3. If the live project uses the earlier handoff column names (`profiles.user_id`, `onboarding_items`), apply `db/006_runtime_compatibility.sql`. This creates the service-only transaction RPC without removing the temporary anon policy.
+4. Deploy and configure `submit-lead`.
+5. Live-test the function and confirm one request creates a lead, requirement, activity and follow-up task.
+6. Change `submissionMode` in `assets/js/config.js` from `legacy-direct` to `edge-function`, deploy GitHub Pages, and repeat the test.
+7. Only then apply `db/005_disable_direct_anon_lead_insert.sql` and confirm direct anonymous inserts fail.
 
 Migration 005 must not be run early: GitHub Pages has no server runtime and would otherwise lose enquiries.
 
