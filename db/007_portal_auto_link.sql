@@ -1,7 +1,7 @@
 -- =====================================================================
--- Exchange Line — Portal Auto-Link Update (Fixed)
+-- Exchange Line — Portal Auto-Link Update (Fixed 2)
 -- Automatically links newly signed-up auth users to their existing quotes 
--- by joining the leads table (does not rely on customer_email column).
+-- by joining the leads table. Uses the live DB schema columns.
 -- =====================================================================
 
 -- 1. Update the authentication trigger for future sign-ups
@@ -33,7 +33,7 @@ begin
     order by created_at desc limit 1;
 
     if v_lead_id is not null then
-      insert into public.customer_cases(lead_id, stage, next_step, customer_user_id, title)
+      insert into public.customer_cases(lead_id, status, public_next_step, customer_user_id, customer_message)
       values(
         v_lead_id, 
         'formal_quote', 
@@ -69,7 +69,7 @@ begin
       order by created_at desc limit 1;
 
       if v_lead_id is not null then
-        insert into public.customer_cases(lead_id, stage, next_step, customer_user_id, title)
+        insert into public.customer_cases(lead_id, status, public_next_step, customer_user_id, customer_message)
         values(
           v_lead_id, 
           'formal_quote', 
