@@ -1,1 +1,48 @@
-<!DOCTYPE html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Customer portal | Exchange Line</title><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="../assets/css/site.css"></head><body class="auth-shell"><header class="nav"><div class="wrap nav-inner"><a class="brand" href="../"><span class="brand-dot"></span>Exchange Line</a><span>Customer portal</span></div></header><main><section id="portal-auth" class="auth-card panel"><p class="eyebrow">Secure quoted-customer access</p><h1>Open your case</h1><p>Portal access is invited only after a real formal quote exists. Sign in using the invited email address.</p><form id="portal-auth-form"><div class="field"><label for="portal-email">Email</label><input class="control" id="portal-email" type="email" autocomplete="email" required></div><button class="button" type="submit">Email me a sign-in link</button><p id="portal-auth-status" role="status"></p></form></section><section id="portal-empty" class="auth-card panel" hidden><h1>No linked case</h1><p>Your account is signed in but no customer case is linked yet. Portal invitations are created only after a formal quote exists.</p><button class="button secondary js-signout" type="button">Sign out</button></section><section id="portal-view" class="wrap dashboard" hidden><header class="dashboard-head"><div><p class="eyebrow">Your secure case</p><h1 id="case-title">Phone-system journey</h1></div><button class="button secondary js-signout" type="button">Sign out</button></header><div class="detail-grid"><div><section class="panel"><h2>Current stage</h2><p><span class="badge" id="case-stage"></span></p><p id="case-next-step"></p><p id="quote-link-wrap" hidden><a class="button" id="quote-link" href="./" rel="noopener noreferrer">Open official formal quote</a></p><p id="secure-instructions"></p></section><section class="panel"><h2>Requirements summary</h2><div id="portal-requirements"></div></section><section class="panel"><h2>Installation</h2><div id="installation"></div></section></div><aside><section class="panel"><h2>Onboarding checklist</h2><ul class="summary-list" id="checklist"></ul></section><section class="panel"><h2>Support</h2><form id="support-form"><div class="field"><label for="support-subject">Subject</label><input class="control" type="text" id="support-subject" maxlength="160" required></div><div class="field"><label for="support-message">How can we help?</label><textarea class="control" id="support-message" maxlength="2000" required></textarea></div><button class="button" type="submit">Create support request</button><p id="support-status" role="status"></p></form><ul class="summary-list" id="support-list"></ul></section></aside></div></section></main><script type="module" src="../assets/js/portal.js"></script></body></html>
+<!DOCTYPE html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Customer portal | Exchange Line</title><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="../assets/css/site.css"></head><body class="auth-shell"><header class="nav"><div class="wrap nav-inner"><a class="brand" href="../"><span class="brand-dot"></span>Exchange Line</a><span>Customer portal</span></div></header><main><section id="portal-auth" class="auth-card panel"><p class="eyebrow">Secure quoted-customer access</p><h1 id="auth-title">Sign in</h1><p id="auth-desc">Portal access is invited only after a real formal quote exists.</p>
+
+<form id="portal-login-form">
+  <div class="field" style="margin-bottom: 12px;">
+    <label for="login-email">Email</label>
+    <input class="control" id="login-email" type="email" autocomplete="email" required>
+  </div>
+  <div class="field" style="margin-bottom: 16px;">
+    <label for="login-password">Password</label>
+    <input class="control" id="login-password" type="password" autocomplete="current-password" required>
+  </div>
+  <button class="button" type="submit" style="width: 100%;">Sign In</button>
+  <p id="login-status" role="status" class="form-status"></p>
+  <div style="margin-top: 16px; font-size: 13px; text-align: center; color: var(--muted);">
+    <a href="#" id="show-signup" style="color: var(--teal); text-decoration: underline; margin-right: 12px;">Create an account</a>
+    <a href="#" id="show-reset" style="color: var(--amber); text-decoration: underline;">Forgot password?</a>
+  </div>
+</form>
+
+<form id="portal-signup-form" hidden>
+  <div class="field" style="margin-bottom: 12px;">
+    <label for="signup-email">Email</label>
+    <input class="control" id="signup-email" type="email" autocomplete="email" required>
+  </div>
+  <div class="field" style="margin-bottom: 16px;">
+    <label for="signup-password">Password</label>
+    <input class="control" id="signup-password" type="password" autocomplete="new-password" required minlength="6">
+  </div>
+  <button class="button" type="submit" style="width: 100%;">Create Account</button>
+  <p id="signup-status" role="status" class="form-status"></p>
+  <div style="margin-top: 16px; font-size: 13px; text-align: center; color: var(--muted);">
+    Already have an account? <a href="#" id="show-login-from-signup" style="color: var(--teal); text-decoration: underline;">Sign In</a>
+  </div>
+</form>
+
+<form id="portal-reset-form" hidden>
+  <div class="field" style="margin-bottom: 16px;">
+    <label for="reset-email">Email</label>
+    <input class="control" id="reset-email" type="email" autocomplete="email" required>
+  </div>
+  <button class="button" type="submit" style="width: 100%;">Send Reset Link</button>
+  <p id="reset-status" role="status" class="form-status"></p>
+  <div style="margin-top: 16px; font-size: 13px; text-align: center; color: var(--muted);">
+    Remembered your password? <a href="#" id="show-login-from-reset" style="color: var(--teal); text-decoration: underline;">Sign In</a>
+  </div>
+</form>
+
+</section><section id="portal-empty" class="auth-card panel" hidden><h1>No linked case</h1><p>Your account is signed in but no customer case is linked yet. Portal invitations are created only after a formal quote exists.</p><button class="button secondary js-signout" type="button">Sign out</button></section><section id="portal-view" class="wrap dashboard" hidden><header class="dashboard-head"><div><p class="eyebrow">Your secure case</p><h1 id="case-title">Phone-system journey</h1></div><button class="button secondary js-signout" type="button">Sign out</button></header><div class="detail-grid"><div><section class="panel"><h2>Current stage</h2><p><span class="badge" id="case-stage"></span></p><p id="case-next-step"></p><p id="quote-link-wrap" hidden><a class="button" id="quote-link" href="./" rel="noopener noreferrer">Open official formal quote</a></p><p id="secure-instructions"></p></section><section class="panel"><h2>Requirements summary</h2><div id="portal-requirements"></div></section><section class="panel"><h2>Installation</h2><div id="installation"></div></section></div><aside><section class="panel"><h2>Onboarding checklist</h2><ul class="summary-list" id="checklist"></ul></section><section class="panel"><h2>Support</h2><form id="support-form"><div class="field"><label for="support-subject">Subject</label><input class="control" type="text" id="support-subject" maxlength="160" required></div><div class="field"><label for="support-message">How can we help?</label><textarea class="control" id="support-message" maxlength="2000" required></textarea></div><button class="button" type="submit">Create support request</button><p id="support-status" role="status"></p></form><ul class="summary-list" id="support-list"></ul></section></aside></div></section></main><script type="module" src="../assets/js/portal.js"></script></body></html>
