@@ -1,7 +1,7 @@
 -- =====================================================================
--- Exchange Line — Portal Auto-Link Update
+-- Exchange Line — Portal Auto-Link Update (Fixed)
 -- Automatically links newly signed-up auth users to their existing quotes 
--- based on email address, allowing immediate portal access.
+-- by joining the leads table (does not rely on customer_email column).
 -- =====================================================================
 
 -- 1. Update the authentication trigger for future sign-ups
@@ -20,9 +20,10 @@ begin
   on conflict(id) do nothing; 
 
   -- Auto-link to an existing customer case if an admin already created one
-  update public.customer_cases 
+  update public.customer_cases c
   set customer_user_id = new.id, updated_at = now()
-  where lower(customer_email) = lower(new.email) and customer_user_id is null;
+  from public.leads l
+  where c.lead_id = l.id and lower(l.email) = lower(new.email) and c.customer_user_id is null;
 
   -- If no customer case exists, but they previously submitted a quote request (lead),
   -- create a customer case automatically so they can see their portal!
@@ -32,10 +33,9 @@ begin
     order by created_at desc limit 1;
 
     if v_lead_id is not null then
-      insert into public.customer_cases(lead_id, customer_email, stage, next_step, customer_user_id, title)
+      insert into public.customer_cases(lead_id, stage, next_step, customer_user_id, title)
       values(
         v_lead_id, 
-        lower(new.email), 
         'formal_quote', 
         'We are preparing your official quote based on your requirements.', 
         new.id,
@@ -57,9 +57,10 @@ declare
 begin
   for r in select id, email from auth.users loop
     -- Link existing cases
-    update public.customer_cases 
+    update public.customer_cases c
     set customer_user_id = r.id, updated_at = now()
-    where lower(customer_email) = lower(r.email) and customer_user_id is null;
+    from public.leads l
+    where c.lead_id = l.id and lower(l.email) = lower(r.email) and c.customer_user_id is null;
 
     -- Create case if a lead exists but no case exists
     if not exists (select 1 from public.customer_cases where customer_user_id = r.id) then
@@ -68,10 +69,9 @@ begin
       order by created_at desc limit 1;
 
       if v_lead_id is not null then
-        insert into public.customer_cases(lead_id, customer_email, stage, next_step, customer_user_id, title)
+        insert into public.customer_cases(lead_id, stage, next_step, customer_user_id, title)
         values(
           v_lead_id, 
-          lower(r.email), 
           'formal_quote', 
           'We are preparing your official quote based on your requirements.', 
           r.id,
