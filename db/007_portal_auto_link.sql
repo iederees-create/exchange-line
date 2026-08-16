@@ -36,7 +36,7 @@ begin
       insert into public.customer_cases(lead_id, status, public_next_step, customer_user_id, customer_message)
       values(
         v_lead_id, 
-        'formal_quote', 
+        'active', 
         'We are preparing your official quote based on your requirements.', 
         new.id,
         'Phone-system journey'
@@ -72,7 +72,7 @@ begin
         insert into public.customer_cases(lead_id, status, public_next_step, customer_user_id, customer_message)
         values(
           v_lead_id, 
-          'formal_quote', 
+          'active', 
           'We are preparing your official quote based on your requirements.', 
           r.id,
           'Phone-system journey'
