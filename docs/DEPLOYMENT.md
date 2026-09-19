@@ -82,6 +82,27 @@ select policyname,cmd,roles from pg_policies where schemaname='public' and table
 
 Use an anon-key REST request after 005 and expect permission denied. Use the Edge Function and expect HTTP 201 plus only `submission_id` and `summary`.
 
+## Migration 009 — Shafeeqah portfolio (additive, separate from 005)
+
+`db/009_shafeeqah_portfolio.sql` adds namespaced tables (`sf_site_admins`, `sf_enquiries`, `sf_enquiry_activities`, `sf_events`, `sf_submission_rate_limits`) and service-role RPCs for the Shafeeqah Francis portfolio. It does **not** change Exchange Line `leads` / `quotes`, does not replace migration 005, and must not be applied as if it were 005.
+
+- Apply 009 only after a database backup. It is additive.
+- Do not grant anon SELECT on `sf_enquiries` or other PII tables.
+- Rate-limit keys live in `sf_submission_rate_limits`, not Exchange Line `submission_rate_limits`.
+- Deploy `submit-shafeeqah-enquiry` and `record-shafeeqah-event` with `--no-verify-jwt` after 009. Origin is still required.
+- These functions do not send email or WhatsApp.
+- Do not deploy from this branch until Shafeeqah has signed off the code change. The Supabase CLI is not assumed to be logged in.
+
+```sh
+supabase functions deploy submit-shafeeqah-enquiry --no-verify-jwt
+supabase functions deploy record-shafeeqah-event --no-verify-jwt
+```
+
+```sql
+select relname, relrowsecurity from pg_class where relname in
+('sf_site_admins','sf_enquiries','sf_enquiry_activities','sf_events','sf_submission_rate_limits');
+```
+
 ## Rollback
 
 For a frontend regression, revert the Git commit and push `main`. Before migration 005, the legacy form remains available. After migration 005, do not re-enable direct inserts casually; roll the frontend back to the last working Edge Function version. Database rollback should be restoration from the pre-migration backup or a reviewed forward migration—never destructive ad-hoc SQL.
